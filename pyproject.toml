@@ -1,0 +1,99 @@
+[project]
+name = "enbot"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "aiogram>=3.25.0",
+    "aiogram-dialog>=2.4.0",
+    "aiohttp>=3.13.3",
+    "alembic>=1.18.4",
+    "asyncpg>=0.31.0",
+    "dataclass-factory>=2.16",
+    "dishka>=1.8.0",
+    "dishka-faststream>=0.6.0",
+    "faststream>=0.6.6",
+    "fluentogram>=1.2.1",
+    "nats-py>=2.13.1",
+    "openai>=2.21.0",
+    "orjson>=3.11.7",
+    "pillow>=12.1.1",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.13.0",
+    "sqlalchemy>=2.0.46",
+    "structlog>=25.5.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+    "ruff>=0.15.2",
+]
+
+test = [
+    "pytest>=7.2.0,<8.0",
+    "pytest-ordering>=0.6,<0.7",
+    "pytest-asyncio>=0.18.3,<0.19",
+    "pytest-cov",
+    "testcontainers>=4.5.1,<5.0",
+    "httpx>=0.23.0,<0.24.0",
+    "coverage[toml]",
+    "types-python-dateutil>=2.8.19,<3.0",
+    "types-redis>=4.3.21,<5.0",
+    "types-PyYAML>=6.0.12,<7.0",
+    "lxml-stubs>=0.4.0,<0.5",
+    "types-openpyxl",
+    "types-python-jose",
+    "types-passlib",
+    #    "aiogram-tests @ git+https://github.com/bomzheg/aiogram_tests.git@331a15c",
+    "pytest-dotenv>=0.5.2",
+]
+
+[tool.black]
+line-length = 99
+target-version = ['py310', 'py311']
+include_trailing_comma = true
+exclude = '''
+(
+    \.eggs
+  | \.git
+  | \.tox
+  | build
+  | dist
+  | venv
+  | docs
+  | .idea
+)
+'''
+
+[tool.ruff]
+line-length = 99
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "RUF001", "S101", "D", "ANN101", "S311", "PD008", "UP035", "C408", "C417",
+    "ANN102", "EM101", "TRY003", "PIE790", "RET505", "A003", "EM102", "RUF003",
+    "RET503", "RET502", "ARG005", "TCH003", "RUF002", "SIM108", "UP024", "ISC001",
+    "FA102", "RUF015", "FIX002", "TD002", "TD003", "TD004", "TD005", "FA100",
+    # fixme
+    "ANN201", "SIM300", "COM812", "I001", "PLR0913", "UP015", "UP015", "B905",
+    "RUF007", "ANN401", "ANN001", "PLR0911", "FBT001", "ANN002", "ANN003",
+    "ARG002", "ARG001", "ANN204", "BLE001", "TRY400", "TCH001", "TCH002",
+    "PGH003", "FBT002", "N818", "PLW2901", "RET504", "PLC1901", "RUF006",
+    "FBT003", "SIM102", "S106", "PLR2004", "DTZ007", "ANN206", "PGH004",
+    "TRY301", "ANN202", "SIM114",
+    #    "W293",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = [
+    "SLF001", "PLR2004", "PLR0913", "PT004", "PT023", "PT001",
+    "PLR0915", "ARG001", "PTH123"  # fixme
+]
+"tests/**/conftest.py" = ["F811"]
+"shvatka/api/*" = ["B008"]
+"**/migrations/versions/*" = ["N999"]
+"**/crawler/**parser/*" = ["PLR0912", "B904"]
+"shvatka/infrastructure/db/models/*" = ["RUF012"]
