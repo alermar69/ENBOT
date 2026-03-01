@@ -97,3 +97,8 @@ ignore = [
 "**/migrations/versions/*" = ["N999"]
 "**/crawler/**parser/*" = ["PLR0912", "B904"]
 "shvatka/infrastructure/db/models/*" = ["RUF012"]
+
+[tool.uv.workspace]
+members = [
+    "nats",
+]

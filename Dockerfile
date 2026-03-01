@@ -29,6 +29,4 @@ COPY .. .
 #ENTRYPOINT []
 
 # Run the python script using `uv run`
-CMD ["uv", "run", "app.py"]
-
-#CMD ["poetry", "run", "python", "app.py"]
+CMD ["uv", "run", "app/main.py"]

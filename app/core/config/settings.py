@@ -11,9 +11,7 @@ from core.config.redis import RedisConfig
 from core.config.struct_logs.config import StructLogConfig
 from pydantic_settings import (
     BaseSettings,
-    PydanticBaseSettingsSource,
     SettingsConfigDict,
-    YamlConfigSettingsSource,
 )
 
 CONFIG_DIR = Path(__file__).resolve().parent.parent.parent
