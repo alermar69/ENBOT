@@ -1,0 +1,90 @@
+# Profiles
+# 1) all - runs all
+# 2) without_bot - all but without bot
+# 3) infrastructure - run only infrastructure
+#
+# Usage `docker compose --profile all up`
+
+services:
+  app:
+    image: enbot-image:latest
+    restart: on-failure
+    networks:
+      - myNetwork
+    #    command: [ "uv", "run", "app/main.py" ]
+    depends_on:
+      - nats
+      - postgres
+    profiles:
+      - all
+
+  ai:
+    image: ai-image:latest
+    restart: on-failure
+    command: [ "uv", "run", "main.py" ]
+    networks:
+      - myNetwork
+    depends_on:
+      - nats
+    profiles:
+      - without_bot
+      - all
+
+  nats-migrate:
+    image: nats-mg-image:latest
+    command: [ "uv", "run", "migration.py" ]
+    restart: no
+    networks:
+      - myNetwork
+    volumes:
+      - ./nats-mg/data:/data
+      - ./nats-mg/nats.conf:/config/nats.conf
+    depends_on:
+      - nats
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+
+  nats:
+    image: nats:2.10.22
+    restart: on-failure
+    entrypoint: /nats-server
+    command: "-c /config/nats.conf"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - myNetwork
+    volumes:
+      - ./nats-mg/data:/data
+      - ./nats-mg/nats.conf:/config/nats.conf
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+
+  postgres:
+    image: 'postgres:17.2'
+    restart: on-failure
+    ports:
+      - 5439:5432
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: 11
+      POSTGRES_DB: bot
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - myNetwork
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+
+networks:
+  myNetwork:
+    driver: bridge
+
+volumes:
+  postgres_data:

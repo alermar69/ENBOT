@@ -15,7 +15,6 @@ class DatabaseConfig(BaseModel):
     port: int = 5439
     user: str = "app"
     password: SecretStr
-    # password: str = 11
 
     sqla: SQLAlchemyConfig = SQLAlchemyConfig()
 
@@ -28,7 +27,6 @@ class DatabaseConfig(BaseModel):
             port=self.port,
             username=self.user,
             password=self.password.get_secret_value(),
-            # password=self.password,
         )
 
     naming_convention: dict[str, str] = {

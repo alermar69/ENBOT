@@ -2,11 +2,12 @@ import logging
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, SecretStr
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
 )
+from sqlalchemy import URL
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,12 +43,32 @@ class LoggingConfig(BaseModel):
         return logging.getLevelNamesMapping()[self.log_level.upper()]
 
 
-class DatabaseConfig(BaseModel):
-    url: PostgresDsn
+class SQLAlchemyConfig(BaseModel):
+    pool_size: int = 20
+    max_overflow: int = 5
     echo: bool = False
     echo_pool: bool = False
-    pool_size: int = 50
-    max_overflow: int = 10
+
+
+class DatabaseConfig(BaseModel):
+    name: str = "bot"
+    host: str = "localhost"
+    port: int = 5439
+    user: str = "app"
+    password: SecretStr
+
+    sqla: SQLAlchemyConfig = SQLAlchemyConfig()
+
+    @property
+    def async_url(self) -> URL:
+        return URL.create(
+            drivername="postgresql+asyncpg",
+            database=self.name,
+            host=self.host,
+            port=self.port,
+            username=self.user,
+            password=self.password.get_secret_value(),
+        )
 
     naming_convention: dict[str, str] = {
         "ix": "ix_%(column_0_label)s",
