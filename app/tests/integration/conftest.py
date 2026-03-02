@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher
 from aiogram_dialog.api.protocols import MessageManagerProtocol
 from alembic.command import upgrade
 from alembic.config import Config as AlembicConfig
-from core.config import settings
+from core.config import settings, struct_logs
 from core.config.settings import CONFIG_DIR
 from dataclass_factory import Factory
 from dishka import AsyncContainer, Provider, Scope, make_async_container
@@ -16,6 +16,8 @@ from tests.fixtures.db_provider import TestDbProvider
 from tests.mocks.bot import MockBotProvider, MockMessageManagerProvider
 
 logger = logging.getLogger(__name__)
+
+struct_logs.startup(settings.structlog)
 
 
 @pytest_asyncio.fixture(scope="session")

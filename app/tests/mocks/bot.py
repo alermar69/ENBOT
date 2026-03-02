@@ -21,6 +21,6 @@ class MockBotProvider(Provider):
 
     @provide
     async def get_bot(self) -> Bot:
-        struct_logs.startup(settings.structlog)
+        # struct_logs.startup(settings.structlog)
         bot = MockedBot(token=settings.bot.token.get_secret_value())
         return bot
