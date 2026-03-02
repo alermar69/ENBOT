@@ -1,5 +1,7 @@
 import asyncio
+import sys
 from asyncio import CancelledError
+from pathlib import Path
 
 import core.config.struct_logs
 import dishka_faststream
@@ -12,12 +14,15 @@ from faststream.nats import NatsBroker
 from infra.di.utils import warm_up
 from infra.I18N import i18n_factory
 
+sys.path.append(str(Path(__file__).parent))
+
 dishka = create_dishka()
 
 
 async def main():
     logger = structlog.get_logger(__name__)
     struct_logs.startup(settings.structlog)
+    await logger.info(settings.nats.server)
     await logger.info("App is starting, configs parsed successfully")
 
     dp = await dishka.get(Dispatcher)

@@ -10,25 +10,53 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: on-failure
     env_file:
-      - .env
+      - ./app/.env
+    networks:
+      - myNetwork
+    environment:
+      APP_CONFIG__NATS__SERVER: "nats://nats:4222"
+      APP_CONFIG__DB__HOST: "postgres"
+      APP_CONFIG__DB__PORT: "5432"
     #    command: [ "uv", "run", "app/main.py" ]
     depends_on:
       - nats
+      - postgres
     profiles:
+      - all
+
+  ai:
+    build:
+      context: ./ai/
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - ./ai/.env
+    command: [ "uv", "run", "main.py" ]
+    environment:
+      APP_CONFIG__NATS__URL: "nats://nats:4222"
+    networks:
+      - myNetwork
+    depends_on:
+      - nats
+    profiles:
+      - without_bot
       - all
 
   nats-migrate:
     build:
-      context: ./nats/
+      context: ./nats-mg/
       dockerfile: Dockerfile
     command: [ "uv", "run", "migration.py" ]
     restart: no
     environment:
-      NATS_URL: "nats://nats:4222"
+      APP_CONFIG__NATS__URL: "nats://nats:4222"
+    networks:
+      - myNetwork
     volumes:
-      - ./nats/data:/data
-      - ./nats/nats.conf:/config/nats.conf
+      - ./nats-mg/data:/data
+      - ./nats-mg/nats.conf:/config/nats.conf
     depends_on:
       - nats
     profiles:
@@ -44,9 +72,11 @@ services:
     ports:
       - "4222:4222"
       - "8222:8222"
+    networks:
+      - myNetwork
     volumes:
-      - ./nats/data:/data
-      - ./nats/nats.conf:/config/nats.conf
+      - ./nats-mg/data:/data
+      - ./nats-mg/nats.conf:/config/nats.conf
     profiles:
       - without_bot
       - infrastructure
@@ -54,13 +84,25 @@ services:
 
   postgres:
     image: 'postgres:17.2'
+    restart: on-failure
     ports:
       - 5439:5432
     environment:
       POSTGRES_USER: app
       POSTGRES_PASSWORD: 11
       POSTGRES_DB: bot
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - myNetwork
     profiles:
       - without_bot
       - infrastructure
       - all
+
+networks:
+  myNetwork:
+    driver: bridge
+
+volumes:
+  postgres_data:

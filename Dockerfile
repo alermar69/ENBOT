@@ -1,32 +1,30 @@
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+FROM python:3.13-slim AS builder
+
+# Установка системных зависимостей
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка uv в стандартное место
+COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /usr/local/bin/uv
 
 WORKDIR /app
-COPY uv.lock pyproject.toml ./
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project --no-dev
+COPY . .
 
-RUN #uv install --no-interaction --no-cache --no-root
+# ---------- Stage 2: Runtime ----------
+FROM python:3.13-slim AS runtime
 
-## Enable bytecode compilation
-#ENV UV_COMPILE_BYTECODE=1
-#
-## Copy from the cache instead of linking since it's a mounted volume
-#ENV UV_LINK_MODE=copy
-#
-## Print Python and uv version for debugging
-#RUN python --version && which python && uv --version
-#
-## Install dependencies
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --locked --no-install-project --no-dev
+# Копируем uv из builder
+COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
 
-COPY .. .
-#
-## Place executables in the environment at the front of the path
-#ENV PATH="/app/.venv/bin:$PATH"
-#
-## Reset the entrypoint, don't invoke `uv`
-#ENTRYPOINT []
+WORKDIR /app
+COPY --from=builder /app /app
 
-# Run the python script using `uv run`
-CMD ["uv", "run", "app/main.py"]
+# Устанавливаем переменные окружения
+ENV PATH="/app/.venv/bin:$PATH"
+
+CMD sh -c "alembic upgrade head && uv run app/main.py"
+

@@ -1,6 +1,7 @@
 from typing import AsyncIterable
 
 import orjson
+import structlog
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -18,6 +19,8 @@ from core.config import settings
 from dishka import AsyncContainer, Provider, Scope, provide
 from dishka.integrations.aiogram import setup_dishka
 from faststream.nats import JStream, NatsBroker
+
+logger = structlog.get_logger(__name__)
 
 
 class BotProvider(Provider):
@@ -94,6 +97,7 @@ class NatsProvider(Provider):
         self,
         dishka: AsyncContainer,
     ) -> NatsBroker:
+        await logger.info(settings.nats.server)
         nc = NatsBroker(settings.nats.server)
         nc.include_router(router_nc_sentences)
         await nc.start()
