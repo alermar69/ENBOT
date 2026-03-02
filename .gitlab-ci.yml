@@ -8,8 +8,8 @@ stages:
 build-job:
   stage: build
   before_script:
-    - cp ${ENBOT_ENV} .env
-    - cp ${ENBOT_TEST_ENV} .env-test
+    - cp ${ENBOT_ENV} ./app/.env
+    - cp ${ENBOT_TEST_ENV} ./app/.env-test
     - cp ${AI_ENV} ./ai/.env
     - cp ${NATS_MG_ENV} ./nats-mg/.env
   script:
