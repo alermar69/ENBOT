@@ -31,7 +31,7 @@ build-job:
 Migrations:
   stage: migrations
   script:
-    - docker run --rm --network botNetwork enbot-image alembic upgrade head -v
+    - docker run --rm --network botNetwork enbot-image alembic upgrade head
 
 Tests:
   stage: test
