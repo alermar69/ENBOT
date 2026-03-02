@@ -22,7 +22,9 @@ COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
 
 WORKDIR /app
 COPY --from=builder /app /app
-CMD ["uv", "run", "migration.py"]
+# Устанавливаем переменные окружения
+ENV PATH="/app/.venv/bin:$PATH"
+CMD ["uv", "run", "main.py"]
 
 
 #
