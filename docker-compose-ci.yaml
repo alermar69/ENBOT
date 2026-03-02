@@ -10,7 +10,7 @@ services:
     image: enbot-image:latest
     restart: on-failure
     networks:
-      - myNetwork
+      - botNetwork
     #    command: [ "uv", "run", "app/main.py" ]
     depends_on:
       - nats
@@ -23,7 +23,7 @@ services:
     restart: on-failure
     command: [ "uv", "run", "main.py" ]
     networks:
-      - myNetwork
+      - botNetwork
     depends_on:
       - nats
     profiles:
@@ -35,7 +35,7 @@ services:
     command: [ "uv", "run", "migration.py" ]
     restart: no
     networks:
-      - myNetwork
+      - botNetwork
     volumes:
       - ./nats-mg/data:/data
       - ./nats-mg/nats.conf:/config/nats.conf
@@ -55,7 +55,7 @@ services:
       - "4222:4222"
       - "8222:8222"
     networks:
-      - myNetwork
+      - botNetwork
     volumes:
       - ./nats-mg/data:/data
       - ./nats-mg/nats.conf:/config/nats.conf
@@ -76,14 +76,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - myNetwork
+      - botNetwork
     profiles:
       - without_bot
       - infrastructure
       - all
 
 networks:
-  myNetwork:
+  botNetwork:
     driver: bridge
 
 volumes:

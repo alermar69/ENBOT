@@ -8,6 +8,7 @@ stages:
 build-job:
   stage: build
   before_script:
+    - docker network create botNetwork || true
     - cp ${ENBOT_ENV} ./app/.env
     - cp ${ENBOT_TEST_ENV} ./app/.env-test
     - cp ${AI_ENV} ./ai/.env
@@ -20,22 +21,22 @@ build-job:
 #Lint:
 #  stage: lint_format
 #  script:
-#    - docker run --rm --network myNetwork enbot-image ruff check
+#    - docker run --rm --network botNetwork enbot-image ruff check
 #
 #Format:
 #  stage: lint_format
 #  script:
-#    - docker run --rm --network myNetwork enbot-image ruff format --check
+#    - docker run --rm --network botNetwork enbot-image ruff format --check
 
 Migrations:
   stage: migrations
   script:
-    - docker run --rm --network myNetwork enbot-image alembic upgrade head
+    - docker run --rm --network botNetwork enbot-image alembic upgrade head -v
 
 Tests:
   stage: test
   script:
-    - docker run --rm --network myNetwork enbot-image pytest -s -v
+    - docker run --rm --network botNetwork enbot-image pytest -s -v
 
 deploy-job:
   stage: deploy
