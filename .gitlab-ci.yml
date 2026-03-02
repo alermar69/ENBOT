@@ -17,26 +17,6 @@ build-job:
     - docker build -t ai-image ./ai/
     - docker build -t nats-mg-image ./nats-mg/
 
-#Lint:
-#  stage: lint_format
-#  script:
-#    - docker run --rm --network botNetwork enbot-image ruff check
-#
-#Format:
-#  stage: lint_format
-#  script:
-#    - docker run --rm --network botNetwork enbot-image ruff format --check
-
-#Migrations:
-#  stage: migrations
-#  script:
-#    - docker run --rm --network botNetwork enbot-image alembic upgrade head
-
-#Tests:
-#  stage: test
-#  script:
-#    - docker run --rm --network botNetwork enbot-image pytest -s -v
-
 deploy-job:
   stage: deploy
   script:

@@ -1,10 +1,3 @@
-# Profiles
-# 1) all - runs all
-# 2) without_bot - all but without bot
-# 3) infrastructure - run only infrastructure
-#
-# Usage `docker compose --profile all up`
-
 services:
   app:
     image: enbot-image:latest
@@ -14,8 +7,6 @@ services:
     #    command: [ "uv", "run", "app/main.py" ]
     depends_on:
       - nats
-    profiles:
-      - all
 
   ai:
     image: ai-image:latest
@@ -25,9 +16,6 @@ services:
       - botNetwork
     depends_on:
       - nats
-    profiles:
-      - without_bot
-      - all
 
   nats-migrate:
     image: nats-mg-image:latest
@@ -40,10 +28,6 @@ services:
       - ./nats-mg/nats.conf:/config/nats.conf
     depends_on:
       - nats
-    profiles:
-      - without_bot
-      - infrastructure
-      - all
 
   nats:
     image: nats:2.10.22
@@ -58,11 +42,7 @@ services:
     volumes:
       - ./nats-mg/data:/data
       - ./nats-mg/nats.conf:/config/nats.conf
-    profiles:
-      - without_bot
-      - infrastructure
-      - all
 
 networks:
   botNetwork:
-    driver: bridge
+    external: true
