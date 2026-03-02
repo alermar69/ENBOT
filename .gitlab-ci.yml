@@ -30,6 +30,9 @@ build-job:
 
 Migrations:
   stage: migrations
+  before_script:
+    - docker compose -f docker-compose-ci.yml up -d postgres
+  #    - docker run --rm --network botNetwork enbot-image sh -c "until nc -z postgres 5432; do sleep 1; done"
   script:
     - docker run --rm --network botNetwork enbot-image alembic upgrade head
 
