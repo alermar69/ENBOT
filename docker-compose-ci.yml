@@ -1,6 +1,7 @@
 services:
   app:
     image: enbot-image:latest
+    container_name: 'enbot'
     restart: on-failure
     networks:
       - botNetwork
@@ -10,6 +11,7 @@ services:
 
   ai:
     image: ai-image:latest
+    container_name: 'ai'
     restart: on-failure
     command: [ "uv", "run", "main.py" ]
     networks:
@@ -31,6 +33,7 @@ services:
 
   nats:
     image: nats:2.10.22
+    container_name: 'nats'
     restart: on-failure
     entrypoint: /nats-server
     command: "-c /config/nats.conf"
