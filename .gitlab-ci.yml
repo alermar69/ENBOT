@@ -8,7 +8,6 @@ stages:
 build-job:
   stage: build
   before_script:
-    - docker network create botNetwork || true
     - cp ${ENBOT_ENV} ./app/.env
     - cp ${ENBOT_TEST_ENV} ./app/.env-test
     - cp ${AI_ENV} ./ai/.env
