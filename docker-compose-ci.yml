@@ -65,6 +65,7 @@ services:
       - all
 
   postgres:
+    container_name: 'postgres'
     image: 'postgres:17.2'
     restart: on-failure
     ports:
