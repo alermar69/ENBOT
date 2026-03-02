@@ -26,6 +26,6 @@ COPY --from=builder /app /app
 # Устанавливаем переменные окружения
 ENV PATH="/app/.venv/bin:$PATH"
 
-CMD sh -c "uv run app/main.py"
-#CMD sh -c "alembic upgrade head && uv run app/main.py"
+#CMD sh -c "uv run app/main.py"
+CMD sh -c "alembic upgrade head && uv run app/main.py"
 

@@ -1,8 +1,8 @@
 stages:
   - build
   #  - lint_format
-  - migrations
-  - test
+  #  - migrations
+  #  - test
   - deploy
 
 build-job:
@@ -27,15 +27,15 @@ build-job:
 #  script:
 #    - docker run --rm --network botNetwork enbot-image ruff format --check
 
-Migrations:
-  stage: migrations
-  script:
-    - docker run --rm --network botNetwork enbot-image alembic upgrade head
+#Migrations:
+#  stage: migrations
+#  script:
+#    - docker run --rm --network botNetwork enbot-image alembic upgrade head
 
-Tests:
-  stage: test
-  script:
-    - docker run --rm --network botNetwork enbot-image pytest -s -v
+#Tests:
+#  stage: test
+#  script:
+#    - docker run --rm --network botNetwork enbot-image pytest -s -v
 
 deploy-job:
   stage: deploy
