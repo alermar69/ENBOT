@@ -30,9 +30,6 @@ build-job:
 
 Migrations:
   stage: migrations
-  before_script:
-    - docker network create botNetwork || true
-    - docker compose -f docker-compose-ci.yml up -d postgres
   script:
     - docker run --rm --network botNetwork enbot-image alembic upgrade head
 

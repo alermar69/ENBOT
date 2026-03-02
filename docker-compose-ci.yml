@@ -14,7 +14,6 @@ services:
     #    command: [ "uv", "run", "app/main.py" ]
     depends_on:
       - nats
-      - postgres
     profiles:
       - all
 
@@ -64,28 +63,6 @@ services:
       - infrastructure
       - all
 
-  postgres:
-    container_name: 'postgres'
-    image: 'postgres:17.2'
-    restart: on-failure
-    ports:
-      - 5439:5432
-    environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: 11
-      POSTGRES_DB: bot
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - botNetwork
-    profiles:
-      - without_bot
-      - infrastructure
-      - all
-
 networks:
   botNetwork:
     driver: bridge
-
-volumes:
-  postgres_data:
