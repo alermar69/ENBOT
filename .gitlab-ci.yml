@@ -1,8 +1,8 @@
 stages:
   - build
   #  - lint_format
-  #  - migrations
-  #  - test
+  - migrations
+  - test
   - deploy
 
 build-job:
@@ -16,6 +16,16 @@ build-job:
     - docker build -t enbot-image .
     - docker build -t ai-image ./ai/
     - docker build -t nats-mg-image ./nats-mg/
+
+Migrations:
+  stage: migrations
+  script:
+    - docker run --rm --network botNetwork enbot-image alembic upgrade head
+
+Tests:
+  stage: test
+  script:
+    - docker run --rm --network botNetwork enbot-image pytest -s -v
 
 deploy-job:
   stage: deploy
