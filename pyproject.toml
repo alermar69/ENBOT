@@ -100,6 +100,6 @@ ignore = [
 
 [tool.uv.workspace]
 members = [
-    "nats",
+    #    "nats",
     #    "ai",
 ]

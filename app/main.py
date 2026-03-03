@@ -22,7 +22,6 @@ dishka = create_dishka()
 async def main():
     logger = structlog.get_logger(__name__)
     struct_logs.startup(settings.structlog)
-    await logger.info(settings.nats.server)
     await logger.info("App is starting, configs parsed successfully")
 
     dp = await dishka.get(Dispatcher)

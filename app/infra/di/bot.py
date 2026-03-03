@@ -97,8 +97,8 @@ class NatsProvider(Provider):
         self,
         dishka: AsyncContainer,
     ) -> NatsBroker:
-        await logger.info(settings.nats.server)
-        nc = NatsBroker(settings.nats.server)
+        await logger.info(settings.nats.url)
+        nc = NatsBroker(settings.nats.url)
         nc.include_router(router_nc_sentences)
         await nc.start()
         return nc

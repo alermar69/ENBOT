@@ -4,7 +4,7 @@ import nats
 import structlog
 from config import settings
 from nats.js.api import KeyValueConfig
-from nats.js.errors import BadRequestError, BucketNotFoundError
+from nats.js.errors import BucketNotFoundError
 
 
 async def main():
