@@ -2,7 +2,7 @@ stages:
   - build
   #  - lint_format
   - migrations
-  #  - test
+  - test
   - deploy
 
 build-job:
@@ -22,10 +22,10 @@ Migrations:
   script:
     - docker run --rm --network botNetwork enbot-image alembic upgrade head
 
-#Tests:
-#  stage: test
-#  script:
-#    - docker run --rm --network botNetwork enbot-image pytest -s -v
+Tests:
+  stage: test
+  script:
+    - docker run --rm --network botNetwork enbot-image pytest -s -v
 
 deploy-job:
   stage: deploy

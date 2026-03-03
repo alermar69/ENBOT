@@ -21,6 +21,7 @@ services:
 
   nats-migrate:
     image: nats-mg-image:latest
+    container_name: 'nats_mg'
     command: [ "uv", "run", "migration.py" ]
     restart: no
     networks:
