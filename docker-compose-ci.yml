@@ -26,8 +26,8 @@ services:
     networks:
       - botNetwork
     volumes:
-      - ./nats-mg/data:/data
-      - ./nats-mg/nats.conf:/config/nats.conf
+      - /root/nats-mg/data:/data
+      - /root/nats-mg/nats.conf:/config/nats.conf
     depends_on:
       - nats
 
@@ -43,8 +43,8 @@ services:
     networks:
       - botNetwork
     volumes:
-      - ./nats-mg/data:/data
-      - ./nats-mg/nats.conf:/config/nats.conf
+      - /root/nats-mg/data:/data
+      - /root/nats-mg/nats.conf:/config/nats.conf
 
 networks:
   botNetwork:
