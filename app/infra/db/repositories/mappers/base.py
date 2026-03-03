@@ -1,10 +1,8 @@
-from typing import TypeVar, Type
+from typing import Type, TypeVar
 
+from infra.db.models.base import Base
 from pydantic import BaseModel
 from sqlalchemy import Row, RowMapping
-
-from src.database import Base
-
 
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
 
