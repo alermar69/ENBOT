@@ -1,22 +1,21 @@
 import asyncio
-import sys
 from asyncio import CancelledError
 from pathlib import Path
 
-import core.config.struct_logs
-import dishka_faststream
 import structlog
+import sys
 from aiogram import Bot, Dispatcher
-from bot.main_factory import create_dishka, resolve_update_types
-from core.config import settings, struct_logs
 from faststream import FastStream
 from faststream.nats import NatsBroker
-from infra.di.utils import warm_up
+
+from core.config import settings, struct_logs
 from infra.I18N import i18n_factory
+from infra.di.main_factory import resolve_update_types
+from infra.di.utils import warm_up
 
 sys.path.append(str(Path(__file__).parent))
 
-dishka = create_dishka()
+from infra.di.main_factory import dishka
 
 
 async def main():
@@ -27,17 +26,10 @@ async def main():
     dp = await dishka.get(Dispatcher)
     bot = await dishka.get(Bot)
     nc = await dishka.get(NatsBroker)
-
-    app = FastStream(nc)
-    dishka_faststream.setup_dishka(container=dishka, app=app, auto_inject=True)
-
-    # setup_dishka(container=dishka, broker=nc)
+    app_faststream = await dishka.get(FastStream)
 
     try:
-        # await app.run()
         await warm_up(dishka)
-        # await bot.delete_webhook()
-        # await dp.start_polling(bot, allowed_updates=resolve_update_types(dp))
         await dp.start_polling(
             bot,
             _translator_hub=i18n_factory(),
@@ -50,7 +42,7 @@ async def main():
     finally:
         await logger.info("stopped")
         await dishka.close()
-        await app.stop()
+        await app_faststream.stop()
         await nc.stop()
 
 

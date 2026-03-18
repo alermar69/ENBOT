@@ -3,9 +3,10 @@ from aiogram_dialog import DialogManager
 from aiogram_dialog.api.entities import Context, Stack
 from aiogram_dialog.api.protocols import BgManagerFactory
 from aiogram_dialog.context.storage import StorageProxy
-from core.models import dto
 from dishka import AsyncContainer
+from faststream import FastStream
 from faststream.nats import NatsBroker
+from infra.db import dto
 from infra.db.dao.holder import HolderDao
 
 
@@ -20,5 +21,6 @@ class SHMiddlewareData(DialogMiddlewareData, total=False):
     dishka_container: AsyncContainer
     dao: HolderDao
     nats: NatsBroker
+    app_faststream: FastStream
     user: dto.User | None
     bg_manager_factory: BgManagerFactory

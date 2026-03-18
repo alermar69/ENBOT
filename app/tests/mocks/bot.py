@@ -5,8 +5,6 @@ from core.config import settings, struct_logs
 from dishka import Provider, Scope, provide
 from tests.mocks.mocked_aiogram import MockedBot
 
-# from tests.aiogram_tests import MockedBot
-
 
 class MockMessageManagerProvider(Provider):
     scope = Scope.APP

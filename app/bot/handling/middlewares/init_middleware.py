@@ -3,6 +3,7 @@ from typing import Any, Awaitable, Callable
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from bot.utils.data import SHMiddlewareData
+from faststream import FastStream
 from faststream.nats import NatsBroker
 from infra.db.dao.holder import HolderDao
 
@@ -17,5 +18,6 @@ class InitMiddleware(BaseMiddleware):
         dishka = data["dishka_container"]
         data["dao"] = await dishka.get(HolderDao)
         data["nats"] = await dishka.get(NatsBroker)
+        data["app_faststream"] = await dishka.get(FastStream)
         result = await handler(event, data)  # type: ignore[arg-type]
         return result

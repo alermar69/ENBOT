@@ -12,7 +12,7 @@ from bot.handling.views.commands import (
     HELP_COMMAND,
     HELP_USER,
 )
-from core.models import dto
+from infra.db import dto
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ async def cancel_state(message: Message, state: FSMContext):
 
 async def cmd_about(message: Message, user: dto.User):
     logger.info("User %s read about in %s", user.tg_id)
-    await message.reply("Разработчик бота - @bomzheg\n")
+    await message.reply("Разработчик бота - @alermar\n")
 
 
 async def cmd_help(message: Message):

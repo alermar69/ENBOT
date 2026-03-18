@@ -1,7 +1,9 @@
+from pathlib import Path
+
 from fluent_compiler.bundle import FluentBundle
 from fluentogram import FluentTranslator, TranslatorHub
 
-DIR_PATH = "app/infra/I18N/locales"
+DIR_PATH = Path(__file__).parent / "locales"
 
 
 def i18n_factory() -> TranslatorHub:

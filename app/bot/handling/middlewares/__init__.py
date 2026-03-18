@@ -4,6 +4,6 @@ from .translator import TranslatorRunnerMiddleware
 
 __all__ = [
     "LoggingMiddleware",
-    "TranslatorRunnerMiddleware",
     "TrackAllUsersMiddleware",
+    "TranslatorRunnerMiddleware",
 ]

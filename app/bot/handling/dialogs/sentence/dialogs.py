@@ -1,28 +1,22 @@
 import operator
 
-from aiogram import F
 from aiogram_dialog import Dialog, Window
 from aiogram_dialog.widgets.kbd import (
     Back,
     Button,
-    Cancel,
     Column,
     Multiselect,
     Next,
     Row,
-    ScrollingGroup,
-    Select,
-    SwitchInlineQuery,
 )
-from aiogram_dialog.widgets.text import Const, Format, Jinja, Multi
+from aiogram_dialog.widgets.text import Const, Format
+from bot.handling.states.en_text_translate import EnTextTranslateSG
 
-from ...states.en_text_translate import EnTextTranslateSG
 from .getters import get_sentence, get_words
-from .handlers import on_off_translate, on_off_words, words_filled
+from .handlers import on_off_translate, on_off_words
 
 dialog = Dialog(
     Window(
-        Jinja("Выбрана игра: <b>Перевод предложения</b>"),
         Format("{text}"),
         Next(Const("Переводы слов"), id="translate_words"),
         Button(Const("Следующее предложение"), id="text"),
@@ -39,8 +33,6 @@ dialog = Dialog(
                 id="multi_topics",
                 item_id_getter=operator.itemgetter(0),
                 items="words_en_ru",
-                on_state_changed=words_filled,
-                on_click=words_filled,
                 when="is_show_words",
             ),
         ),

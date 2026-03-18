@@ -1,4 +1,4 @@
-from shvatka.core.models import dto
+from infra.db import dto
 
 
 def assert_user(expected: dto.User, actual: dto.User):

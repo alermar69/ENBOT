@@ -1,16 +1,3 @@
-#FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
-#
-#WORKDIR /app
-#COPY uv.lock pyproject.toml ./
-#
-#RUN uv sync --locked --no-install-project --no-dev
-#
-#COPY .. .
-#
-#CMD ["uv", "run", "migration.py"]
-#
-
-
 FROM python:3.13-slim AS builder
 
 # Установка системных зависимостей
@@ -38,26 +25,3 @@ COPY --from=builder /app /app
 # Устанавливаем переменные окружения
 ENV PATH="/app/.venv/bin:$PATH"
 CMD ["uv", "run", "migration.py"]
-
-
-
-
-#FROM python:3.13.7-bookworm AS builder
-#ENV VIRTUAL_ENV=/opt/venv
-#ENV CODE_PATH=/code
-#RUN python3 -m venv $VIRTUAL_ENV
-#WORKDIR $CODE_PATH
-#COPY uv.lock pyproject.toml ${CODE_PATH}/
-#RUN $VIRTUAL_ENV/bin/pip install uv && $VIRTUAL_ENV/bin/uv sync --locked --no-install-project --no-dev
-#
-#FROM python:3.13.7-slim-bookworm
-#ARG VCS_SHA
-#ARG BUILD_AT
-#ENV VIRTUAL_ENV=/opt/venv
-#ENV CODE_PATH=/code
-#ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-#COPY --from=builder $VIRTUAL_ENV $VIRTUAL_ENV
-#COPY . ${CODE_PATH}/app
-#WORKDIR $CODE_PATH/app
-#RUN echo "{\"vcs_hash\": \"${VCS_SHA}\", \"build_at\": \"${BUILD_AT}\" }" > version.yaml
-#CMD ["uv", "run", "migration.py"]

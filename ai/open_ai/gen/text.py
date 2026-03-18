@@ -1,10 +1,9 @@
 import asyncio
 
+from core.config import settings
+from core.dto.ai import AiResponse
 from openai import AsyncOpenAI
 from openai.types.chat import ChatCompletionMessageParam, ChatCompletionUserMessageParam
-
-from core.config import settings
-from core.DTO import AiResponse
 
 
 async def gpt_text(req: str, model: str) -> AiResponse | None:

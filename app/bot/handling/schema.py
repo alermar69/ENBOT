@@ -2,8 +2,7 @@ from typing import Awaitable
 
 import structlog
 from aiogram import Dispatcher
-from aiogram_dialog import StartMode, setup_dialogs
-from bot.handling import dialogs
+from aiogram_dialog import setup_dialogs
 from bot.handling.filters import ChatType, ChatTypeFilter
 from bot.handling.handlers import get_user_router, start_router
 from bot.handling.middlewares import (

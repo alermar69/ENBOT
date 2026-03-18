@@ -43,10 +43,6 @@ ADD_IN_TEAM_COMMAND = BotCommand(
 MANAGE_TEAM_COMMAND = BotCommand(
     command="manage_team", description="открыть меню управления командой"
 )
-START_WAIVERS_COMMAND = BotCommand(command="waivers", description="начать сборку вейверов")
-APPROVE_WAIVERS_COMMAND = BotCommand(
-    command="approve_waivers", description="закрыть сборку вейверов"
-)
 
 HELP_TEAM = CommandsGroup(
     "Команды для управления командой:",
@@ -54,41 +50,6 @@ HELP_TEAM = CommandsGroup(
         CREATE_TEAM_COMMAND,
         ADD_IN_TEAM_COMMAND,
         MANAGE_TEAM_COMMAND,
-        START_WAIVERS_COMMAND,
-        APPROVE_WAIVERS_COMMAND,
-    ],
-)
-
-
-MY_GAMES_COMMAND = BotCommand(command="my_games", description="мои игры (включая черновики)")
-NEW_LEVEL_COMMAND = BotCommand(command="new_level", description="новый уровень")
-NEW_GAME_COMMAND = BotCommand(
-    command="new_game", description="начать сборку новой игры из ранее написанных уровней"
-)
-LEVELS_COMMAND = BotCommand(command="levels", description="показать список уровней")
-GET_WAIVERS_COMMAND = BotCommand(command="get_waivers", description="показать текущие вейверы")
-SPY_COMMAND = BotCommand(command="spy", description="Меню шпиона - организатора")
-SPY_LEVELS_COMMAND = BotCommand(
-    command="spy_levels", description="показать на каких уровнях команды (только во время игры)"
-)
-SPY_KEYS_COMMAND = BotCommand(
-    command="spy_keys", description="получить введённые ключи (только во время игры)"
-)
-PUBLISH_COMMAND = BotCommand(command="publish_forum", description="опубликовать на форуме")
-
-
-HELP_ORG = CommandsGroup(
-    "Команды для организаторов:",
-    [
-        MY_GAMES_COMMAND,
-        NEW_LEVEL_COMMAND,
-        NEW_GAME_COMMAND,
-        LEVELS_COMMAND,
-        GET_WAIVERS_COMMAND,
-        SPY_COMMAND,
-        SPY_LEVELS_COMMAND,
-        SPY_KEYS_COMMAND,
-        PUBLISH_COMMAND,
     ],
 )
 
@@ -152,7 +113,6 @@ HELP_USER = "\n\n".join(
         (
             HELP_BASE,
             HELP_TEAM,
-            HELP_ORG,
             HELP_INFO,
         ),
     )
@@ -163,7 +123,6 @@ HELP_USER_ADMIN = "\n\n".join(
         str,
         (
             HELP_BASE,
-            HELP_ORG,
             HELP_TEAM,
             HELP_INFO,
             HELP_GAME_ADMIN,

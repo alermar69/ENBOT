@@ -1,13 +1,8 @@
-from typing import Any, Awaitable, Callable, Dict, Optional, cast
+from typing import Any, Awaitable, Callable, Dict, cast
 
-import structlog
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
 from cachetools import TTLCache
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
-
-# from database.requests import upsert_user
 
 
 class TrackAllUsersMiddleware(BaseMiddleware):

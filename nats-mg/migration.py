@@ -33,7 +33,6 @@ async def main():
     except BucketNotFoundError as e:
         await js.create_key_value(KeyValueConfig(kv_name))
 
-    # await js.create_object_store("watermarker-images", ObjectStoreConfig())
     logger.debug("NATS Buckets created")
 
 

@@ -36,6 +36,8 @@ class Settings(BaseSettings):
         ),
     )
 
+    tg_id: int
+
     MODE: Literal["TEST", "LOCAL", "DEV", "PROD"]
 
     bot: BotConfig = BotConfig()

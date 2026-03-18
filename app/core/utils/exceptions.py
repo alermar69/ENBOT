@@ -1,7 +1,7 @@
 import typing
 
 if typing.TYPE_CHECKING:
-    from core.models import dto
+    from infra.db import dto
 
 
 class SHError(Exception):
@@ -16,10 +16,6 @@ class SHError(Exception):
         team_id: int | None = None,
         game_id: int | None = None,
         user: "dto.User | None" = None,
-        # player: "dto.Player | None" = None,
-        # chat: "dto.Chat | None" = None,
-        # team: "dto.Team | None" = None,
-        # game: Any | None = None,
         alarm: bool | None = False,
         notify_user: str | None = None,
         confidential: str | None = None,
@@ -34,10 +30,6 @@ class SHError(Exception):
         self.team_id = team_id
         self.game_id = game_id
         self.user = user
-        # self.player = player
-        # self.chat = chat
-        # self.team = team
-        # self.game = game
         self.alarm = alarm
         self.notify_user = notify_user or self.notify_user
         self.confidential = confidential
@@ -83,6 +75,10 @@ class ChatNotFound(SHError):
     notify_user = "Такой чат не найден"
 
 
+class MultipleWordFound(SHError):
+    notify_user = "Такое слово не найдено"
+
+
 class FileNotFound(SHError, AttributeError):
     notify_user = "Файл не найден"
 
@@ -105,78 +101,6 @@ class SaltNotExist(SaltError):
     notify_user = "Этот запрос устарел, попробуйте ещё раз"
 
 
-class GameError(SHError):
-    notify_user = "Ошибка связанная с игрой"
-
-
-class GameHasAnotherAuthor(GameError):
-    notify_user = "У этой игры другой автор"
-
-
-class GameStatusError(GameError):
-    def __init__(self, game_status: str | None = None, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.game_status = game_status
-
-    notify_user = "Статус игры не соответствует запрошенному действию"
-
-
-class AnotherGameIsActive(GameStatusError):
-    notify_user = (
-        "Другая игра уже помечена активной, т.е. "
-        "собирает вейверы, начата, или награждение не проведено"
-    )
-
-
-class HaveNotActiveGame(GameStatusError):
-    notify_user = (
-        "Нет игры, которая была бы помечена активной, т.е. "
-        "собирала вейверы, начата, или не закончена"
-    )
-
-
-class AnotherGameWasStarted(AnotherGameIsActive):
-    notify_user = "Другая игра уже начата"
-
-
-class GameNotCompleted(GameStatusError):
-    notify_user = "Данная игра не завершена. Невозможно отобразить её данные"
-
-
-class CantDeleteActiveGame(GameStatusError):
-    notify_user = "Нельзя удалить игру которая сейчас активна"
-
-
-class CantEditGame(GameStatusError):
-    notify_user = "Нельзя удалить игру которая сейчас активна или завершена"
-
-
-class CantDeleteCompletedGame(GameStatusError):
-    notify_user = "Нельзя удалить завершённую игру"
-
-
-class GameNotFinished(GameStatusError):
-    notify_user = (
-        "Игра не завершена. Данное действие можно выполнить только с завершённой игрой"
-    )
-
-
-class GameNotFound(GameError, AttributeError):
-    notify_user = "Игра не найдена"
-
-
-class LevelError(SHError):
-    notify_user = "Ошибка связанная с уровнем"
-
-    def __init__(self, level_id: int | None = None, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.level_id = level_id
-
-
-class LevelNotLinked(LevelError):
-    notify_user = "Уровень не привязан к игре"
-
-
 class PermissionsError(SHError):
     notify_user = "Ошибка связанная с полномочиями"
 
@@ -193,11 +117,6 @@ class PromoteError(PermissionsError):
 class CantBeAuthor(PermissionsError):
     notify_user = "Пользователь не имеет права быть автором"
     permission_name = "can_be_author"
-
-
-class TestingNotAllowed(PermissionsError, LevelError):
-    notify_user = "Тестирование этого уровня не доступно для этого пользователя"
-    permission_name = "level_test"
 
 
 class NotAuthorizedForEdit(PermissionsError):
@@ -247,19 +166,3 @@ class NoUsernameFound(UsernameResolverError):
 
 class MultipleUsernameFound(UsernameResolverError):
     notify_user = "К сожалению по этому username найдено несколько пользователей"
-
-
-class WaiverError(GameError):
-    notify_user = "Ошибка вейверов"
-
-
-class WaiverForbidden(WaiverError):
-    notify_user = "данному игроку запрещено подавать вейверы на эту игру"
-
-
-class InvalidKey(SHError):
-    notify_user = "Это не ключ. Например начинается не с SH/СХ, используется что-то кроме букв и цифр"
-
-    def __init__(self, key: str | None = None, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.key = key

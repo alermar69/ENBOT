@@ -1,4 +1,3 @@
-from core.models import dto
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -18,11 +17,9 @@ class Word(Base):
     ru: Mapped[str] = mapped_column(String(50), nullable=True)
     trans: Mapped[str] = mapped_column(String(50), nullable=True)
     ru_full: Mapped[str] = mapped_column(Text, nullable=True)
+    trans_full: Mapped[str] = mapped_column(Text, nullable=True)
     audio_id = mapped_column(Text, nullable=True)
     image_id = mapped_column(Text, nullable=True)
-
-    def to_dto(self) -> dto.Word:
-        return dto.Word.model_validate(self, from_attributes=True)
 
 
 class WordsUsers(Base):

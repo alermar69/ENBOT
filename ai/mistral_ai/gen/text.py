@@ -1,9 +1,8 @@
 from time import sleep
 
-from mistralai import Mistral
-
 from core.config import settings
-from core.DTO import AiResponse
+from core.dto.ai import AiResponse
+from mistralai import Mistral
 
 
 def gpt_text(req: str, model: str) -> AiResponse | None:
